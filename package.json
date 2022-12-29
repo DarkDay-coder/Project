@@ -1,11 +1,12 @@
 {
-  "name": "tour-be",
-  "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Sibu-Dhital",
-  "license": "ISC"
+    "name": "tour-be",
+    "version": "1.0.0",
+    "description": "",
+    "main": "server.js",
+    "scripts": {
+        "start": "nodemon tour-be/server",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Sibu-Dhital",
+    "license": "ISC"
 }
