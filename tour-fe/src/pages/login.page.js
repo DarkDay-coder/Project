@@ -33,15 +33,29 @@ const socialList = [
    },
 ];
 let initialValues = {
-   name: '',
+   email: '',
    password: '',
 };
 const LoginPage = () => {
+   document.title = 'Tour | Login';
    const { values, errors, touched, handleChange, handleBlur, handleSubmit } =
       useFormik({
          initialValues,
          validationSchema: loginValidationSchema,
          onSubmit: (values, action) => {
+            console.log(
+               '🚀 ~ file: login.page.js:45 ~ LoginPage ~ values',
+               values
+            );
+            // let response = axios.post(
+            //    'http://localhost:15000/api/v1/login',
+            //    values,
+            //    {
+            //       headers: {
+            //          'content-type': 'application/json',
+            //       },
+            //    }
+            // );
             action.resetForm();
             console.log(values);
          },
@@ -61,14 +75,14 @@ const LoginPage = () => {
                         <Form.Control
                            className="form-control"
                            type="text"
-                           name="name"
-                           placeholder="Enter User Name *"
-                           value={values.name}
+                           name="email"
+                           placeholder="Enter User Email Address *"
+                           value={values.email}
                            onChange={handleChange}
                            onBlur={handleBlur}
                         />
                         <span className="text-danger">
-                           {errors.name && touched.name ? errors.name : ''}
+                           {errors.email && touched.email ? errors.email : ''}
                         </span>
                      </Form.Group>
                      <Form.Group className="form-group">
