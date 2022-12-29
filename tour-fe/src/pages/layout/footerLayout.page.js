@@ -1,4 +1,4 @@
-import { Button, Container, Form, Nav } from 'react-bootstrap';
+import { Button, Container, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const siteList = [
@@ -10,14 +10,14 @@ const siteList = [
       text: 'Feedback',
       link: '#',
    },
-   {
-      text: 'Famous Destinations',
-      link: '#',
-   },
-   {
-      text: 'Support Forums',
-      link: '#',
-   },
+   // {
+   //    text: 'Famous Destinations',
+   //    link: '#',
+   // },
+   // {
+   //    text: 'Support Forums',
+   //    link: '#',
+   // },
 ];
 
 const useList = [
@@ -25,22 +25,22 @@ const useList = [
       text: 'About Us',
       link: '#',
    },
-   {
-      text: 'Guide List',
-      link: '#',
-   },
+   // {
+   //    text: 'Guide List',
+   //    link: '#',
+   // },
    {
       text: 'Contact Us',
       link: '#',
    },
-   {
-      text: 'Terms & Conditions',
-      link: '#',
-   },
-   {
-      text: 'Privacy Policy',
-      link: '#',
-   },
+   // {
+   //    text: 'Terms & Conditions',
+   //    link: '#',
+   // },
+   // {
+   //    text: 'Privacy Policy',
+   //    link: '#',
+   // },
 ];
 
 const socialList = [
@@ -48,26 +48,26 @@ const socialList = [
       text: 'Facebook',
       link: '#',
    },
-   {
-      text: 'Twitter',
-      link: '#',
-   },
-   {
-      text: 'Instagram',
-      link: '#',
-   },
-   {
-      text: 'YouTube',
-      link: '#',
-   },
+   // {
+   //    text: 'Twitter',
+   //    link: '#',
+   // },
+   // {
+   //    text: 'Instagram',
+   //    link: '#',
+   // },
+   // {
+   //    text: 'YouTube',
+   //    link: '#',
+   // },
    {
       text: 'WhatsApp',
       link: '#',
    },
-   {
-      text: 'Viber',
-      link: '#',
-   },
+   // {
+   //    text: 'Viber',
+   //    link: '#',
+   // },
 ];
 
 const supportList = [
@@ -79,14 +79,14 @@ const supportList = [
       text: 'Connect with us',
       link: '#',
    },
-   {
-      text: 'Talk to Guide',
-      link: '#',
-   },
-   {
-      text: 'Contact Support',
-      link: '#',
-   },
+   // {
+   //    text: 'Talk to Guide',
+   //    link: '#',
+   // },
+   // {
+   //    text: 'Contact Support',
+   //    link: '#',
+   // },
 ];
 
 const Footer = () => {

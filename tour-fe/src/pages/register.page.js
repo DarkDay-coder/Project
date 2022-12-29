@@ -91,7 +91,7 @@ const RegisterPage = () => {
                               className="w-25 m-1 p-0"
                               onClick={(e) => {
                                  let pass = document.getElementById('password');
-                                 if (pass.type == 'text') {
+                                 if (pass.type === 'text') {
                                     pass.type = 'password';
                                  } else {
                                     pass.type = 'text';
@@ -124,7 +124,7 @@ const RegisterPage = () => {
                               onClick={(e) => {
                                  let pass =
                                     document.getElementById('confirmPassword');
-                                 if (pass.type == 'text') {
+                                 if (pass.type === 'text') {
                                     pass.type = 'password';
                                  } else pass.type = 'text';
                               }}

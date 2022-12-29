@@ -1,9 +1,11 @@
 import { Fragment } from 'react';
 import { Button, Container, Form, NavLink } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { loginValidationSchema } from './validation/login.validation';
 import PageHeader from './layout/headerLayout.page';
+import AuthService from '../services/login.service';
+import { toast } from 'react-toastify';
 
 const socialList = [
    {
@@ -37,39 +39,42 @@ let initialValues = {
    password: '',
 };
 const LoginPage = () => {
+   const auth_svc = new AuthService();
+
+   const navigate = useNavigate();
    document.title = 'Tour | Login';
    const { values, errors, touched, handleChange, handleBlur, handleSubmit } =
       useFormik({
          initialValues,
          validationSchema: loginValidationSchema,
-         onSubmit: (values, action) => {
-            console.log(
-               '🚀 ~ file: login.page.js:45 ~ LoginPage ~ values',
-               values
-            );
-            // let response = axios.post(
-            //    'http://localhost:15000/api/v1/login',
-            //    values,
-            //    {
-            //       headers: {
-            //          'content-type': 'application/json',
-            //       },
-            //    }
-            // );
-            action.resetForm();
-            console.log(values);
+         onSubmit: async (values, action) => {
+            try {
+               let userData = await auth_svc.login(values);
+               console.log('user data: ', userData);
+               action.resetForm();
+               if (userData) {
+                  toast.success(`welcome back mr. ${userData.name}`, {
+                     theme: 'dark',
+                  });
+                  // TODO: redirect to dashboard
+                  if (userData.role === 'admin') navigate('/' + userData.role);
+                  else navigate('/');
+               } else {
+               }
+            } catch (error) {
+               console.log(error);
+            }
          },
       });
 
    return (
-      <Fragment>
+      <>
          <PageHeader title={'Login Page'} curPage={'Login'} />
          <div className="login-section p-1 section-bg">
             <Container>
                <div className="account-wrapper p-2 pb-5">
                   <h3 className="text-center">Welcome Back!</h3>
                   <h3 className="title">Login Form</h3>
-
                   <Form className="account-form" onSubmit={handleSubmit}>
                      <Form.Group className="my-1">
                         <Form.Control
@@ -101,7 +106,7 @@ const LoginPage = () => {
                               className="w-25 m-1 p-0"
                               onClick={(e) => {
                                  let pass = document.getElementById('password');
-                                 if (pass.type == 'text') {
+                                 if (pass.type === 'text') {
                                     pass.type = 'password';
                                  } else {
                                     pass.type = 'text';
@@ -144,7 +149,7 @@ const LoginPage = () => {
                   </Form>
                   <div className="account-bottom">
                      <span className="d-block cate pt-10">
-                        Don't Have any Account?
+                        Don't Have an Account?
                         <Link to="/register">
                            <i className="icofont-fire"></i>Sign Up
                         </Link>
@@ -156,12 +161,9 @@ const LoginPage = () => {
                      <ul className="lab-ul social-icons justify-content-center">
                         {socialList.map((val, i) => (
                            <li key={i}>
-                              <NavLink
-                                 className="nav-link ${val.className}"
-                                 href={val.link}
-                              >
+                              <Link href={val.link} className={val.className}>
                                  <i className={val.iconName}></i>
-                              </NavLink>
+                              </Link>
                            </li>
                         ))}
                      </ul>
@@ -169,7 +171,7 @@ const LoginPage = () => {
                </div>
             </Container>
          </div>
-      </Fragment>
+      </>
    );
 };
 

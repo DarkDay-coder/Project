@@ -1,19 +1,5 @@
-import { useState } from 'react';
-import {
-   Button,
-   Col,
-   Container,
-   Image,
-   Nav,
-   Navbar,
-   NavDropdown,
-   Row,
-} from 'react-bootstrap';
+import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
-
-const phoneNumber = '+977-xxx-xxxxxxx';
-const address = 'Thapagaun, KATHMANDU 44600 NEPAL';
-const gmail = 'info@thapagaun.tours.com';
 
 const NavBar = () => {
    return (

@@ -8,11 +8,14 @@ import HomePage from './home.page';
 import HomeLayout from './layout/homeLayout.page';
 import LoginPage from './login.page';
 import RegisterPage from './register.page';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const RoutePage = () => {
    return (
       <>
          <BrowserRouter>
+            <ToastContainer />
             <Routes>
                <Route path="/" element={<HomeLayout />}>
                   <Route index element={<HomePage />} />

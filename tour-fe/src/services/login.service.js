@@ -1,18 +1,29 @@
+import { toast } from 'react-toastify';
 import axiosInstance from '../config/http-request.config';
 
 class AuthService {
-   login = (data) => {
+   login = async (data) => {
       try {
-         let response = axiosInstance.post('/login', data);
-         console.log(
-            '🚀 ~ file: login.service.js:8 ~ AuthService ~ response',
-            response
-         );
-      } catch (error) {
-         console.log(
-            '🚀 ~ file: login.service.js:8 ~ AuthService ~ error',
-            error
-         );
+         let response = await axiosInstance.post('/users/login', data);
+
+         if (response) {
+            localStorage.setItem('token_tour', response.token);
+            localStorage.setItem(
+               'user',
+               JSON.stringify({
+                  name: response.data.name,
+                  email: response.data.email,
+                  role: response.data.role,
+                  active: response.data.active,
+                  createdAt: response.data.createdAt,
+               })
+            );
+            return response.data;
+         } else {
+            throw 'Invalid Credentials';
+         }
+      } catch (exception) {
+         throw exception;
       }
    };
 }
