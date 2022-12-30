@@ -2,7 +2,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 const axiosInstance = axios.create({
-   baseURL: 'http://localhost:15000/api/v1',
+   baseURL: process.env.REACT_APP_API_URL,
    timeout: 30000,
    timeoutErrorMessage: 'Server Timed out...!!!',
    headers: {
@@ -20,10 +20,10 @@ axiosInstance.interceptors.response.use(
    },
    (error) => {
       if (error.response.status === 404) {
-         console.log(
-            '🚀 ~ file: http-request.config.js:22 ~ error.response.status === 404',
-            error
-         );
+         // console.log(
+         //    '🚀 ~ file: http-request.config.js:22 ~ error.response.status === 404',
+         //    error
+         // );
          // TODO: handle here
       } else if (error.response.status === 401) {
          console.log(

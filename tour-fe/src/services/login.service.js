@@ -1,4 +1,3 @@
-import { toast } from 'react-toastify';
 import axiosInstance from '../config/http-request.config';
 
 class AuthService {
