@@ -18,10 +18,12 @@ class jwtToken {
          status: 'success',
          token,
          data: {
+            id: user._id,
             name: user.name,
             email: user.email,
             role: user.role,
             active: user.active,
+            createdAt: user.createdAt,
          },
       });
    };

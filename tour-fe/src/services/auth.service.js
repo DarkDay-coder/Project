@@ -1,9 +1,10 @@
-import axiosInstance from '../config/http-request.config';
+import { toast } from 'react-toastify';
+import HttpService from './http-request.service';
 
-class AuthService {
+class AuthService extends HttpService {
    login = async (data) => {
       try {
-         let response = await axiosInstance.post('/users/login', data);
+         let response = await this.postRequest('/users/login', data, false);
 
          if (response) {
             localStorage.setItem('token_tour', response.token);
@@ -19,6 +20,7 @@ class AuthService {
             );
             return response.data;
          } else {
+            toast.error('Invalid credentials', { theme: 'dark' });
             throw 'Invalid Credentials';
          }
       } catch (exception) {

@@ -10,6 +10,7 @@ import LoginPage from './login.page';
 import RegisterPage from './register.page';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AdminPrivateLayout from './layout/adminPrivateLayout.page';
 
 const RoutePage = () => {
    return (
@@ -22,7 +23,7 @@ const RoutePage = () => {
                   <Route path="/register" element={<RegisterPage />} />
                   <Route path="/login" element={<LoginPage />} />
                </Route>
-               <Route path="/admin" element={<AdminLayout />}>
+               <Route path="/admin" element={<AdminPrivateLayout />}>
                   <Route index element={<AdminDashBoard />} />
                   <Route path="users" element={<UsersListPage />} />
                   {/* <Route path="tours">

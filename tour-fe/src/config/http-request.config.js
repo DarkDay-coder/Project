@@ -2,7 +2,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 const axiosInstance = axios.create({
-   baseURL: process.env.REACT_APP_API_URL,
+   baseURL: 'http://localhost:3005/api',
    timeout: 30000,
    timeoutErrorMessage: 'Server Timed out...!!!',
    headers: {
@@ -20,17 +20,14 @@ axiosInstance.interceptors.response.use(
    },
    (error) => {
       if (error.response.status === 404) {
-         // console.log(
-         //    '🚀 ~ file: http-request.config.js:22 ~ error.response.status === 404',
-         //    error
-         // );
+         toast.error(error.response?.data?.msg);
          // TODO: handle here
       } else if (error.response.status === 401) {
          console.log(
             '🚀 ~ file: http-request.config.js:29 ~ error.response.status === 401',
             error
          );
-         toast.error(error.response?.data?.message, { theme: 'dark' });
+         toast.error(error.response?.data?.msg, { theme: 'dark' });
          // TODO: handle here
          // FIXME: unauthorized access - clear the token and redirect to login page
       } else if (error.response.status === 403) {

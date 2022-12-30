@@ -41,7 +41,10 @@ class authController {
 
       // 1) check whether email and password exist
       if (!body.email || !body.password) {
-         return next(new apiError('Please provide email and Password', 400));
+         res.status(400).json({
+            status: 'fail',
+            msg: 'Please provide email and Password',
+         });
       }
 
       // 2) check if email and password match or not
@@ -49,11 +52,17 @@ class authController {
          .findOne({ email: body.email })
          .select('+password');
       if (!user) {
-         return next(new apiError('Incorrect email or password', 401));
+         res.status(401).json({
+            status: 'fail',
+            msg: 'Incorrect email or password',
+         });
       }
       const pass = await bcrypt.compare(req.body.password, user.password);
       if (!user || !pass) {
-         return next(new apiError('Incorrect email or password', 401));
+         res.status(401).json({
+            status: 'fail',
+            msg: 'Incorrect email or password',
+         });
       }
 
       // 3) if data match with the data on db send JWT in response

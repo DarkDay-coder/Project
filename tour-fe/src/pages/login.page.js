@@ -1,11 +1,12 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Button, Container, Form, NavLink } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useNavigation } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { loginValidationSchema } from './validation/login.validation';
 import PageHeader from './layout/headerLayout.page';
-import AuthService from '../services/login.service';
+import AuthService from '../services/auth.service';
 import { toast } from 'react-toastify';
+import Loader from '../component/loader.component';
 
 const socialList = [
    {
@@ -39,10 +40,30 @@ let initialValues = {
    password: '',
 };
 const LoginPage = () => {
+   document.title = 'Tour | Login';
+
    const auth_svc = new AuthService();
 
+   let [loading, setLoading] = useState(true);
    const navigate = useNavigate();
-   document.title = 'Tour | Login';
+   let [token] = useState(localStorage.getItem('token_tour'));
+   useEffect(() => {
+      if (token) {
+         let user = JSON.parse(localStorage.getItem('user'));
+         if (user.role === 'admin' || user.role === 'lead-guide') {
+            setLoading(false);
+            toast.success('You are already logged in as admin');
+            navigate('/admin');
+         } else {
+            setLoading(false);
+            toast.success('You are already logged in!');
+            navigate('/');
+         }
+      } else {
+         setLoading(false);
+      }
+   }, []);
+
    const { values, errors, touched, handleChange, handleBlur, handleSubmit } =
       useFormik({
          initialValues,
@@ -50,24 +71,36 @@ const LoginPage = () => {
          onSubmit: async (values, action) => {
             try {
                let userData = await auth_svc.login(values);
-               console.log('user data: ', userData);
                action.resetForm();
                if (userData) {
                   toast.success(`welcome back mr. ${userData.name}`, {
                      theme: 'dark',
                   });
-                  // TODO: redirect to dashboard
-                  if (userData.role === 'admin') navigate('/' + userData.role);
-                  else navigate('/');
+                  if (
+                     userData.role === 'admin' ||
+                     userData.role === 'lead-guide'
+                  ) {
+                     navigate('/admin');
+                     setLoading(false);
+                  } else {
+                     setLoading(false);
+                     navigate('/');
+                  }
                } else {
+                  toast.warning('Sorry, Something went wrong..!!');
                }
             } catch (error) {
-               console.log(error);
+               console.log(
+                  '🚀 ~ file: login.page.js:69 ~ onSubmit: ~ error',
+                  error
+               );
             }
          },
       });
 
-   return (
+   return loading ? (
+      <Loader />
+   ) : (
       <>
          <PageHeader title={'Login Page'} curPage={'Login'} />
          <div className="login-section p-1 section-bg">

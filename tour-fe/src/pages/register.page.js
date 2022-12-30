@@ -1,7 +1,10 @@
 import { useFormik } from 'formik';
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import Loader from '../component/loader.component';
+import AuthService from '../services/auth.service';
 import PageHeader from './layout/headerLayout.page';
 import { registerValidationSchema } from './validation/register.validation';
 let socialList = [
@@ -27,7 +30,32 @@ let socialList = [
    },
 ];
 let initialValues = { name: '', email: '', password: '', confirmPassword: '' };
+
 const RegisterPage = () => {
+   document.title = 'Tour | Register';
+
+   const auth_svc = new AuthService();
+
+   let [loading, setLoading] = useState(true);
+   const navigate = useNavigate();
+   let [token] = useState(localStorage.getItem('token_tour'));
+   useEffect(() => {
+      if (token) {
+         let user = JSON.parse(localStorage.getItem('user'));
+         if (user.role === 'admin' || user.role === 'lead-guide') {
+            setLoading(false);
+            toast.success('You are already logged in as admin');
+            navigate('/admin');
+         } else {
+            setLoading(false);
+            toast.success('You are already logged in!');
+            navigate('/');
+         }
+      } else {
+         setLoading(false);
+      }
+   }, []);
+
    const { values, errors, touched, handleChange, handleBlur, handleSubmit } =
       useFormik({
          initialValues,
@@ -38,7 +66,9 @@ const RegisterPage = () => {
          },
       });
 
-   return (
+   return loading ? (
+      <Loader />
+   ) : (
       <Fragment>
          <PageHeader title={'Register Now'} curPage={'Register'} />
          <div className="login-section p-2 section-bg">

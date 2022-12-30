@@ -6,7 +6,17 @@ const auth_ctrl = new AuthController();
 const authMiddleware = require('./../middleware/auth.middleware');
 const auth_midddleware = new authMiddleware();
 
-router.get('/', user_ctrl.getAllUsers).post('/signup', auth_ctrl.signup);
+router
+   .get('/', user_ctrl.getAllUsers)
+   .post('/signup', auth_ctrl.signup)
+   .post('/login', auth_ctrl.login)
+   .get(
+      '/me',
+      auth_midddleware.authorization,
+      user_ctrl.findMe,
+      user_ctrl.getUserById
+   )
+   .get('/:id', user_ctrl.getUserById);
 // router
 //    .post('/signup', auth_ctrl.signup)
 //    .post('/login', auth_ctrl.login)

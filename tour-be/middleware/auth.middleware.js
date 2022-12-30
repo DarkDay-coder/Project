@@ -15,7 +15,10 @@ class authMiddleware {
          token = req.headers.authorization.split(' ')[1];
       }
       if (!token) {
-         // return next(Error('You are not logged in!! Please login First', 401));
+         res.status(401).json({
+            status: 'fail',
+            msg: 'you are not logged in..!!',
+         });
       }
 
       // 2) Verification of token
@@ -24,9 +27,10 @@ class authMiddleware {
       // 3) Check if user still exist or not
       const isUser = await userModel.findById(verification.id);
       if (!isUser) {
-         return next(
-            Error('The user with this token is no longer our user', 401)
-         );
+         return res.status(404).json({
+            status: 'fail',
+            msg: 'The user doesnot exist anymore',
+         });
       }
 
       // 4) Check if user changed password after JWT was issued
