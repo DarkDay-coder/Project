@@ -16,7 +16,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // DATA PARSER MIDDLEWARE
-app.use(express.json({ limit: '10kb' }));
+app.use(express.json());
 app.use(
    express.urlencoded({
       extended: false,
@@ -24,7 +24,9 @@ app.use(
 );
 
 // PUBLISHING STATIC FILES
-app.use(express.static(`${__dirname}/public`));
+// app.use('/assets', express.static('public/'));
+app.use('/images', express.static('public/uploads/'));
+// app.use(express.static(`${__dirname}/public`));
 
 // 2) CUSTOM MIDDLEWARE
 // test middleware

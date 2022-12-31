@@ -4,7 +4,7 @@ import { Button, Container, Form } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Loader from '../component/loader.component';
-import AuthService from '../services/auth.service';
+// import AuthService from '../services/auth.service';
 import PageHeader from './layout/headerLayout.page';
 import { registerValidationSchema } from './validation/register.validation';
 let socialList = [
@@ -34,7 +34,7 @@ let initialValues = { name: '', email: '', password: '', confirmPassword: '' };
 const RegisterPage = () => {
    document.title = 'Tour | Register';
 
-   const auth_svc = new AuthService();
+   // const auth_svc = new AuthService();
 
    let [loading, setLoading] = useState(true);
    const navigate = useNavigate();
@@ -54,17 +54,24 @@ const RegisterPage = () => {
       } else {
          setLoading(false);
       }
-   }, []);
+   }, [token, navigate]);
 
-   const { values, errors, touched, handleChange, handleBlur, handleSubmit } =
-      useFormik({
-         initialValues,
-         validationSchema: registerValidationSchema,
-         onSubmit: (values, action) => {
-            action.resetForm();
-            console.log(values);
-         },
-      });
+   const {
+      values,
+      errors,
+      touched,
+      setValues,
+      handleChange,
+      handleBlur,
+      handleSubmit,
+   } = useFormik({
+      initialValues,
+      validationSchema: registerValidationSchema,
+      onSubmit: (values, action) => {
+         action.resetForm();
+         console.log(values);
+      },
+   });
 
    return loading ? (
       <Loader />
@@ -166,6 +173,25 @@ const RegisterPage = () => {
                            {errors.confirmPassword && touched.confirmPassword
                               ? errors.confirmPassword
                               : ''}
+                        </span>
+                     </Form.Group>
+                     <Form.Group className="my-2">
+                        <Form.Control
+                           className="form-control"
+                           type="file"
+                           name="image"
+                           accept="image/*"
+                           // value={values.image}
+                           onChange={(e) => {
+                              setValues({
+                                 ...values,
+                                 image: e.target.files[0],
+                              });
+                           }}
+                           onBlur={handleBlur}
+                        />
+                        <span className="text-danger">
+                           {errors.image && touched.image ? errors.image : ''}
                         </span>
                      </Form.Group>
                      <Form.Group className="form-group">

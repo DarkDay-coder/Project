@@ -11,6 +11,7 @@ import RegisterPage from './register.page';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AdminPrivateLayout from './layout/adminPrivateLayout.page';
+import UserCreatePage from './admin/users/userCreate.page';
 
 const RoutePage = () => {
    return (
@@ -23,9 +24,13 @@ const RoutePage = () => {
                   <Route path="/register" element={<RegisterPage />} />
                   <Route path="/login" element={<LoginPage />} />
                </Route>
-               <Route path="/admin" element={<AdminPrivateLayout />}>
+               <Route
+                  path="/admin"
+                  element={<AdminPrivateLayout Compontent={<AdminLayout />} />}
+               >
                   <Route index element={<AdminDashBoard />} />
                   <Route path="users" element={<UsersListPage />} />
+                  <Route path="users/create" element={<UserCreatePage />} />
                   {/* <Route path="tours">
                      <Route index element={<ToursListPage />} />
                      <Route path="create" element={<TourCreatePage />} />

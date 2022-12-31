@@ -227,10 +227,7 @@ const Footer = () => {
                         <p>
                            &copy; 2022 <Link to="/">Local Tour Guide</Link>
                            Developed by
-                           <a
-                              href="https://github.com/DarkDay-coder"
-                              target="_blank"
-                           >
+                           <a href="https://github.com/DarkDay-coder">
                               Sibu Dhital
                            </a>
                         </p>

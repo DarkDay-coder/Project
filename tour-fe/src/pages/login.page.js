@@ -1,6 +1,6 @@
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Container, Form, NavLink } from 'react-bootstrap';
-import { Link, useNavigate, useNavigation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { loginValidationSchema } from './validation/login.validation';
 import PageHeader from './layout/headerLayout.page';
@@ -49,20 +49,22 @@ const LoginPage = () => {
    let [token] = useState(localStorage.getItem('token_tour'));
    useEffect(() => {
       if (token) {
-         let user = JSON.parse(localStorage.getItem('user'));
-         if (user.role === 'admin' || user.role === 'lead-guide') {
-            setLoading(false);
-            toast.success('You are already logged in as admin');
-            navigate('/admin');
-         } else {
-            setLoading(false);
-            toast.success('You are already logged in!');
-            navigate('/');
+         async function fetchMe() {
+            let user = await auth_svc.getRequest('/users/me', true);
+            if (user) {
+               setLoading(false);
+               toast.success('You are already Logged in!!');
+               navigate('/');
+            } else {
+               setLoading(false);
+               navigate('/login');
+            }
          }
+         fetchMe();
       } else {
          setLoading(false);
       }
-   }, []);
+   }, [token, navigate, auth_svc]);
 
    const { values, errors, touched, handleChange, handleBlur, handleSubmit } =
       useFormik({
@@ -76,16 +78,8 @@ const LoginPage = () => {
                   toast.success(`welcome back mr. ${userData.name}`, {
                      theme: 'dark',
                   });
-                  if (
-                     userData.role === 'admin' ||
-                     userData.role === 'lead-guide'
-                  ) {
-                     navigate('/admin');
-                     setLoading(false);
-                  } else {
-                     setLoading(false);
-                     navigate('/');
-                  }
+                  setLoading(false);
+                  navigate('/');
                } else {
                   toast.warning('Sorry, Something went wrong..!!');
                }

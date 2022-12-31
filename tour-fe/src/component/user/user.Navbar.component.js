@@ -1,7 +1,17 @@
+import { useState } from 'react';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const NavBar = () => {
+   const navigate = useNavigate();
+   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
+   const logout = (e) => {
+      e.preventDefault();
+      localStorage.removeItem('token_tour');
+      localStorage.removeItem('user');
+      setUser(null);
+      navigate('/login');
+   };
    return (
       <>
          <Navbar collapseOnSelect expand="lg" bg="success" variant="dark">
@@ -65,18 +75,40 @@ const NavBar = () => {
                      </NavLink>
                   </Nav>
                   <Nav>
-                     <NavLink
-                        className="btn btn-success hover-overlay mx-1"
-                        to="/login"
-                     >
-                        <i className="icofont-user"></i> Sign In
-                     </NavLink>
-                     <NavLink
-                        className="btn btn-success hover-overlay mx-1"
-                        to="/register"
-                     >
-                        <i className="icofont-users"></i> Register
-                     </NavLink>
+                     {user ? (
+                        <>
+                           <NavDropdown
+                              title={<i className="icofont-ui-user"></i>}
+                              id="collasible-nav-dropdown"
+                           >
+                              <NavDropdown.Item href="/profile">
+                                 {user.name}
+                              </NavDropdown.Item>
+                              <NavDropdown.Item href={`/${user.role}`}>
+                                 {user.role} page
+                              </NavDropdown.Item>
+                              <NavDropdown.Divider />
+                              <NavDropdown.Item onClick={logout} href="/login">
+                                 LogOut <i className="icofont-logout"></i>
+                              </NavDropdown.Item>
+                           </NavDropdown>
+                        </>
+                     ) : (
+                        <>
+                           <NavLink
+                              className="btn btn-success hover-overlay mx-1"
+                              to="/login"
+                           >
+                              <i className="icofont-user"></i> Sign In
+                           </NavLink>
+                           <NavLink
+                              className="btn btn-success hover-overlay mx-1"
+                              to="/register"
+                           >
+                              <i className="icofont-users"></i> Register
+                           </NavLink>
+                        </>
+                     )}
                   </Nav>
                </Navbar.Collapse>
             </Container>

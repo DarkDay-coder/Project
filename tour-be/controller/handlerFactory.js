@@ -5,12 +5,17 @@ exports.deleteOne = (Model) =>
    catchAsync(async (req, res, next) => {
       const docs = await Model.findByIdAndDelete(req.params.id);
       if (!docs) {
-         return next(new apiError('No documents found with that ID', 404));
+         res.status(404).json({
+            status: 'fail',
+            msg: 'no data found with given ID',
+         });
+      } else {
+         res.status(204).json({
+            status: 'success',
+            msg: 'data deleted successfully..!!',
+            data: null,
+         });
       }
-      res.status(204).json({
-         status: 'success',
-         data: null,
-      });
    });
 
 exports.updateOne = (Model) =>

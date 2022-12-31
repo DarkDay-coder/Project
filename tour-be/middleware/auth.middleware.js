@@ -33,11 +33,6 @@ class authMiddleware {
          });
       }
 
-      // 4) Check if user changed password after JWT was issued
-      // if (!(isUser.createdAt === isUser.updatedAt)) {
-      //    // if(token.iat)
-      // }
-
       req.user = isUser;
       next();
    });

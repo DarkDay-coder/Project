@@ -29,7 +29,7 @@ const AdminPrivateLayout = ({ Compontent }) => {
 
    useEffect(() => {
       checkAccessToken();
-   }, []);
+   }, [checkAccessToken]);
 
    return loading ? <Loader /> : Compontent;
 };

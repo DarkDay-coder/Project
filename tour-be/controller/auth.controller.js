@@ -1,5 +1,5 @@
 const catchAsync = require('../middleware/catchAsync');
-const userModel = require('./../model/user.model');
+const UserModel = require('./../model/user.model');
 const apiError = require('../middleware/apiError.middleware');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
@@ -8,7 +8,7 @@ const token = new jwtToken();
 
 class authController {
    signup = catchAsync(async (req, res, next) => {
-      const isExist = await userModel.findOne({ email: req.body.email });
+      const isExist = await UserModel.findOne({ email: req.body.email });
       if (!isExist) {
          if (!(req.body.password === req.body.confirmPassword)) {
             res.status(203).json({
@@ -16,12 +16,11 @@ class authController {
                msg: "password and confirmPassword doesn't match",
             });
          } else {
-            const newUser = await userModel.create({
+            const newUser = await UserModel.create({
                name: req.body.name,
                email: req.body.email,
                password: req.body.password,
-               confirmPassword: req.body.confirmPassword,
-               // role: req.body.role,
+               image: req.body.image,
             });
             token.createAndSendSignToken(newUser, 201, res);
          }
@@ -31,7 +30,6 @@ class authController {
                status: 'fail',
                msg: 'user with this email already exist',
             })
-            // new apiError('User with this email is already exist', 409)
          );
       }
    });
@@ -48,9 +46,9 @@ class authController {
       }
 
       // 2) check if email and password match or not
-      const user = await userModel
-         .findOne({ email: body.email })
-         .select('+password');
+      const user = await UserModel.findOne({ email: body.email }).select(
+         '+password'
+      );
       if (!user) {
          res.status(401).json({
             status: 'fail',
@@ -58,7 +56,7 @@ class authController {
          });
       }
       const pass = await bcrypt.compare(req.body.password, user.password);
-      if (!user || !pass) {
+      if (!pass) {
          res.status(401).json({
             status: 'fail',
             msg: 'Incorrect email or password',
@@ -71,7 +69,7 @@ class authController {
 
    forgetPassword = catchAsync(async (req, res, next) => {
       // 1) Get user based on posted email address
-      const user = await userModel.findOne({ email: req.body.email });
+      const user = await UserModel.findOne({ email: req.body.email });
       if (!user) {
          return next(new apiError('user does not exist', 404));
       }
@@ -89,7 +87,7 @@ class authController {
 
    updatePassword = catchAsync(async (req, res, next) => {
       // 1) Get user details from collection
-      const user = await userModel.findById(req.user.id).select('+password');
+      const user = await UserModel.findById(req.user.id).select('+password');
 
       // 2) check current password is correct or not
       const pass = await bcrypt

@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify';
+
 const { default: axiosInstance } = require('../config/http-request.config');
 
 class HttpService {
@@ -41,6 +43,21 @@ class HttpService {
       try {
          this.getHeaders(is_strict, false);
          let response = await axiosInstance.get(url, this.headers);
+         if (response) {
+            return response;
+         } else {
+            throw response;
+         }
+      } catch (error) {
+         throw error;
+      }
+   };
+
+   deleteRequest = async (url, is_strict = true) => {
+      try {
+         this.getHeaders(is_strict);
+         let response = await axiosInstance.delete(url, this.headers);
+         toast.success('Document deleted');
          if (response) {
             return response;
          } else {

@@ -1,9 +1,80 @@
-import { Button } from 'react-bootstrap';
-import React from 'react';
+import { Badge, Button, Image } from 'react-bootstrap';
+import React, { useCallback, useEffect, useState } from 'react';
 import AdminBreadCrumb from '../../../component/admin/admin.bredcrumb.component';
+import { toast } from 'react-toastify';
+import UserService from '../../../services/user.service';
+import DataTable from 'react-data-table-component';
+import { NavLink } from 'react-router-dom';
+import noImage from './../../../assets/noImg.png';
+import { ImagePriview } from '../../../component/imagepreview.component';
+import AdminActionButton from '../../../component/admin/admin.actionButton';
 
 const UserListPage = () => {
-   const date = new Date();
+   let user_svc = new UserService();
+   let [data, setData] = useState([]);
+   const getUserList = useCallback(async () => {
+      try {
+         let response = await user_svc.listAllUsers();
+         setData(response.data);
+      } catch (except) {
+         toast.error(except);
+      }
+   }, []);
+   const deleteUser = async (id) => {
+      try {
+         await user_svc.deleteUserById(id);
+      } catch (error) {}
+   };
+   useEffect(() => {
+      // API call to get data
+      getUserList();
+   }, [getUserList, deleteUser]);
+
+   const columns = [
+      {
+         name: 'Name',
+         selector: (row) => row.name,
+         sortable: true,
+      },
+      {
+         name: 'Email',
+         selector: (row) => row.email,
+      },
+      {
+         name: 'Role',
+         selector: (row) => row.role,
+         sortable: true,
+      },
+      {
+         name: 'Image',
+         selector: (row) => <ImagePriview url={noImage} />,
+      },
+      {
+         name: 'Member Since',
+         selector: (row) => row.createdAt,
+         sortable: true,
+      },
+      {
+         name: 'Active/Inactive',
+         selector: (row) =>
+            row.active ? (
+               <Badge bg="success">active</Badge>
+            ) : (
+               <Badge bg="danger">inactive</Badge>
+            ),
+         sortable: true,
+      },
+      {
+         name: 'Action',
+         selector: (row) => (
+            <AdminActionButton
+               id={row._id}
+               contentType="users"
+               submitDelete={deleteUser}
+            />
+         ),
+      },
+   ];
 
    return (
       <>
@@ -16,36 +87,7 @@ const UserListPage = () => {
 
             <div className="card mb-4">
                <div className="card-body">
-                  <table className="table table-sm table-bordered table-hover">
-                     <thead className="table-dark">
-                        <tr>
-                           <th>Name</th>
-                           <th>Email</th>
-                           <th>Role</th>
-                           <th>Member since</th>
-                           <th>Active/Inactive</th>
-                           <th>Action</th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        <tr>
-                           <td>sibu</td>
-                           <td>hell in cell</td>
-                           <td>admin</td>
-                           <td>{date.toISOString()}</td>
-                           <td>Y/N</td>
-                           <td>
-                              <Button>
-                                 {' '}
-                                 <i className="icofont-trash"></i>{' '}
-                              </Button>
-                              <Button>
-                                 <i className="icofont-eye"></i>
-                              </Button>
-                           </td>
-                        </tr>
-                     </tbody>
-                  </table>
+                  <DataTable columns={columns} data={data} pagination />
                </div>
             </div>
          </div>

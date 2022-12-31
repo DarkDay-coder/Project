@@ -12,10 +12,6 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.response.use(
    (response) => {
-      console.log(
-         '🚀 ~ file: http-request.config.js:16 ~interceptors response',
-         response
-      );
       return response.data;
    },
    (error) => {
@@ -36,6 +32,8 @@ axiosInstance.interceptors.response.use(
             error
          );
          toast.error(error.response.data.message, { theme: 'dark' });
+      } else if (error.response.status === 409) {
+         toast.error(error.response.data.msg);
       } else {
          console.log(
             ' 🚀 ~ file: http-request.config.js:43 axiosInstance interceptors else error: ',

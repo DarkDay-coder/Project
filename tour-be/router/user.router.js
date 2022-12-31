@@ -5,10 +5,11 @@ const AuthController = require('./../controller/auth.controller');
 const auth_ctrl = new AuthController();
 const authMiddleware = require('./../middleware/auth.middleware');
 const auth_midddleware = new authMiddleware();
+const fileUploader = require('./../middleware/fileuploader.middleware');
 
 router
    .get('/', user_ctrl.getAllUsers)
-   .post('/signup', auth_ctrl.signup)
+   .post('/signup', fileUploader.single('image'), auth_ctrl.signup)
    .post('/login', auth_ctrl.login)
    .get(
       '/me',
@@ -16,7 +17,14 @@ router
       user_ctrl.findMe,
       user_ctrl.getUserById
    )
-   .get('/:id', user_ctrl.getUserById);
+   .post(
+      '/create',
+      auth_midddleware.authorization,
+      fileUploader.single('image'),
+      user_ctrl.createUser
+   )
+   .get('/:id', user_ctrl.getUserById)
+   .delete('/:id', user_ctrl.deleteUserById);
 // router
 //    .post('/signup', auth_ctrl.signup)
 //    .post('/login', auth_ctrl.login)
