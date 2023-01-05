@@ -29,6 +29,7 @@ const UserListPage = () => {
       // API call to get data
       getUserList();
    }, [getUserList]);
+   // }, [getUserList, deleteUser]);
 
    const columns = [
       {

@@ -1,7 +1,8 @@
+import { Fragment } from 'react';
 import { NavLink } from 'react-router-dom';
 const AdminSidebar = () => {
    return (
-      <>
+      <Fragment>
          <div id="layoutSidenav_nav">
             <nav
                className="sb-sidenav accordion sb-sidenav-dark"
@@ -85,7 +86,7 @@ const AdminSidebar = () => {
                </div>
             </nav>
          </div>
-      </>
+      </Fragment>
    );
 };
 

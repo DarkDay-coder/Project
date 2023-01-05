@@ -15,5 +15,5 @@ export const userValidation = Yup.object({
       ),
    image: Yup.object().nullable(),
    role: Yup.string().required('please select a role'),
-   active: Yup.string().required('Please select status'),
+   active: Yup.string(),
 });

@@ -21,8 +21,8 @@ const AdminPrivateLayout = ({ Compontent }) => {
          }
       } catch (except) {
          // user not logged in
-         localStorage.removeItem('accessToken');
-         localStorage.removeItem('localUser');
+         localStorage.removeItem('user');
+         localStorage.removeItem('token_tour');
 
          navigate('/');
       }

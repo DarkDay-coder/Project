@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button, Form, Nav, NavDropdown, NavLink } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import AdminSidebar from './admin.Sidebar.component';
 
 const AdminNavBar = () => {
    const navigate = useNavigate();
@@ -12,6 +13,12 @@ const AdminNavBar = () => {
       setUser(null);
       navigate('/login');
    };
+   const [isOpen, setIsOpen] = useState(true);
+
+   function toggleSideBar(e) {
+      e.preventDefault();
+      setIsOpen(!isOpen)
+   }
 
    return (
       <>
@@ -21,7 +28,7 @@ const AdminNavBar = () => {
             </NavLink>
             <NavLink
                className="btn btn-transparent btn-sm order-1 order-lg-0 me-4 me-lg-0"
-               id="sidebarToggle"
+               id="sidebarToggle" onClick={toggleSideBar}
             >
                <i className="icofont-exchange"></i>
             </NavLink>
@@ -57,7 +64,11 @@ const AdminNavBar = () => {
                   </NavDropdown.Item>
                </NavDropdown>
             </Nav>
+
          </nav>
+         {/* {
+            isOpen ? <AdminSidebar style={{ maxWidth: '330px' }} /> : ''
+         } */}
       </>
    );
 };
