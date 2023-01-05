@@ -2,10 +2,9 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const cors = require('cors');
-const apiError = require('./middleware/apiError.middleware');
 
 /// ROUTE IMPORTING
-const userRouter = require('./router/user.router');
+const api_routes = require('./routes');
 
 // 1) GLOBAL MIDDLEWARE
 app.use(cors());
@@ -24,12 +23,9 @@ app.use(
 );
 
 // PUBLISHING STATIC FILES
-// app.use('/assets', express.static('public/'));
 app.use('/images', express.static('public/uploads/'));
-// app.use(express.static(`${__dirname}/public`));
 
 // 2) CUSTOM MIDDLEWARE
-// test middleware
 app.use((req, res, next) => {
    req.requestTime = new Date().toISOString();
    console.log('This request is initiated at: ' + req.requestTime);
@@ -37,11 +33,13 @@ app.use((req, res, next) => {
 });
 
 // ROUTE MOUNTING
-app.use('/api/users', userRouter);
-
+app.use('/api/', api_routes);
 // HANDLING UNDEFINED ROUTES
 app.all('*', (req, res, next) => {
-   next(new apiError(`Can't find ${req.originalUrl} on this server!!`, 404));
+   res.status(404).json({
+      status: false,
+      msg: 'requested route not found',
+   });
 });
 
 module.exports = app;

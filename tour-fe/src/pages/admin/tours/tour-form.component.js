@@ -5,7 +5,7 @@ import { NavLink, useParams } from 'react-router-dom';
 import { userValidation } from '../../validation/user.validation';
 import { editUserValidation } from '../../validation/user.validation copy';
 
-const UserForm = ({ data, submitForm }) => {
+const TourForm = ({ data, submitForm }) => {
    const params = useParams();
    const formik = useFormik({
       initialValues: data,
@@ -15,6 +15,7 @@ const UserForm = ({ data, submitForm }) => {
          action.resetForm();
       },
    });
+   console.log(data);
    useEffect(() => {
       if (data) {
          formik.setValues({
@@ -23,7 +24,7 @@ const UserForm = ({ data, submitForm }) => {
       }
    }, [data]);
    return (
-      <Form>
+      <Form onSubmit={formik.handleSubmit}>
          {/* Name */}
          <Form.Group className="my-2">
             <Form.Control
@@ -150,26 +151,18 @@ const UserForm = ({ data, submitForm }) => {
          </Form.Group>
          {/* Active */}
          <Form.Group>
-            <Row>
-               <Col sm={2}>Is Active ?</Col>
-               <Col sm={10}>
-                  <Form.Check
-                     type="switch"
-                     id="custom-switch"
-                     label="Yes"
-                     name="active"
-                     checked={formik.values.active ? true : false}
-                     value={formik.values?.active}
-                     onChange={(e) => {
-                        formik.setValues({
-                           ...formik.values,
-                           active: e.target.checked,
-                        });
-                     }}
-                  />
-               </Col>
-            </Row>
-
+            <Form.Select
+               size="sm"
+               name="active"
+               className="my-2"
+               onChange={formik.handleChange}
+               onBlur={formik.handleBlur}
+               value={formik.values?.active}
+            >
+               <option value={null}>--Select one--</option>
+               <option value={true}>Active</option>
+               <option value={false}>In-active</option>
+            </Form.Select>
             <span className="text-danger">
                {formik.errors.active && formik.touched.active
                   ? formik.errors.active
@@ -179,13 +172,13 @@ const UserForm = ({ data, submitForm }) => {
          {/* Image */}
          <Form.Group className="my-2">
             <Row className="mb-0">
-               <Col sm={7}>
+               <Col sm={9}>
                   <Form.Control
                      className="form-control"
                      type="file"
                      name="image"
                      accept="image/*"
-                     // value={formik.values?.image}
+                     value={formik.values?.image}
                      onChange={(e) => {
                         formik.setValues({
                            ...formik.values,
@@ -195,31 +188,29 @@ const UserForm = ({ data, submitForm }) => {
                      onBlur={formik.handleBlur}
                   />
                   <span className="text-danger">
-                     {formik?.errors?.image ? formik.errors.image : ''}
+                     {formik.errors?.image ? formik.errors.image : ''}
                   </span>
                </Col>
-               <Col sm={5} className="text-center p-2">
+               {/* <Col sm={3} className="text-center p-2">
                   {formik?.values?.image ? (
-                     <img
-                        className="img img-fluid rounded-circle h-50 w-50"
+                     <Image
                         src={
                            typeof formik.values.image === 'object'
                               ? URL.createObjectURL(formik.values.image)
-                              : `http://localhost:3005/images/${formik.values.image}`
+                              : 'http://localhost:3005/images/' +
+                                formik.values.image
                         }
-                     />
+                        className="img img-fluid rounded-circle h-50 w-50"
+                     ></Image>
                   ) : (
-                     <></>
+                     ''
                   )}
-               </Col>
+               </Col> */}
             </Row>
          </Form.Group>
          {/* Buttons */}
          <Form.Group className="text-center">
-            <Button
-               className="btn-success lab-btn mx-2"
-               onClick={formik.handleSubmit}
-            >
+            <Button className="btn-success lab-btn mx-2" type="submit">
                <i className="icofont-paper-plane mx-1"> </i> Create User{' '}
                <i className="icofont-paper-plane mx-1"></i>
             </Button>
@@ -232,4 +223,4 @@ const UserForm = ({ data, submitForm }) => {
    );
 };
 
-export default UserForm;
+export default TourForm;

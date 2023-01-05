@@ -13,17 +13,18 @@ const AdminPrivateLayout = ({ Compontent }) => {
          const auth_svc = new AuthService();
          let user = await auth_svc.getRequest('/users/me', true);
          if (user.status) {
-            setLoading(false);
-            // setIsLoggedIn(true);
-         } else {
-            throw user;
+            if (user.data.role === 'admin' || user.data.role === 'lead-guide') {
+               setLoading(false);
+            } else {
+               throw user;
+            }
          }
       } catch (except) {
          // user not logged in
          localStorage.removeItem('accessToken');
          localStorage.removeItem('localUser');
 
-         navigate('/login');
+         navigate('/');
       }
    };
 

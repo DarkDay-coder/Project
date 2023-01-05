@@ -1,11 +1,9 @@
 //
 import { toast } from 'react-toastify';
-import axiosInstance from '../config/http-request.config';
 import HttpService from './http-request.service';
 class UserService extends HttpService {
    create = async (data) => {
       try {
-         console.log(data);
          // FormData
          let formData = new FormData();
          if (data.image) {
@@ -15,7 +13,6 @@ class UserService extends HttpService {
          Object.keys(data).map((key) => {
             formData.append(key, data[key]);
          });
-         // TODO: API call
          let response = await this.postRequest(
             '/users/create',
             formData,
@@ -45,7 +42,41 @@ class UserService extends HttpService {
    deleteUserById = async (id) => {
       try {
          let del = await this.deleteRequest('/users/' + id, true);
-         console.log(del.statusCode);
+      } catch (error) {
+         throw error;
+      }
+   };
+
+   getUserById = async (id) => {
+      try {
+         let user = await this.getRequest('/users/' + id);
+         return user;
+      } catch (error) {
+         throw error;
+      }
+   };
+
+   updateUserById = async (data, id) => {
+      try {
+         let formData = new FormData();
+         if (data.image && typeof data.image === 'object') {
+            formData.append('image', data.image, data.image.name);
+            delete data.image;
+         }
+         Object.keys(data).map((key) => {
+            formData.append(key, data[key]);
+         });
+         let response = await this.updateRequest(
+            '/users/' + id,
+            formData,
+            true,
+            true
+         );
+         if (response) {
+            return response;
+         } else {
+            throw response;
+         }
       } catch (error) {
          throw error;
       }

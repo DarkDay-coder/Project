@@ -2,33 +2,35 @@ import { Badge } from 'react-bootstrap';
 import React, { useCallback, useEffect, useState } from 'react';
 import AdminBreadCrumb from '../../../component/admin/admin.bredcrumb.component';
 import { toast } from 'react-toastify';
-import UserService from '../../../services/user.service';
+import TourService from '../../../services/tour.service';
 import DataTable from 'react-data-table-component';
 import noImage from './../../../assets/noImg.png';
 import { ImagePriview } from '../../../component/imagepreview.component';
 import AdminActionButton from '../../../component/admin/admin.actionButton';
+import { NavLink } from 'react-router-dom';
 
-const UserListPage = () => {
-   document.title = 'TG | User List';
-   let user_svc = new UserService();
+const TourListPage = () => {
+   document.title = 'TG | Tour List';
+   let tour_svc = new TourService();
    let [data, setData] = useState([]);
-   const getUserList = useCallback(async () => {
+   const getTourList = useCallback(async () => {
       try {
-         let response = await user_svc.listAllUsers();
+         let response = await tour_svc.listAllTours();
          setData(response.data);
       } catch (except) {
          toast.error(except);
       }
    }, []);
-   const deleteUser = async (id) => {
-      try {
-         await user_svc.deleteUserById(id);
-      } catch (error) {}
+   const deleteTours = async (id) => {
+      console.log('clicked on delete');
+      // try {
+      //    await user_svc.deleteUserById(id);
+      // } catch (error) {}
    };
    useEffect(() => {
       // API call to get data
-      getUserList();
-   }, [getUserList]);
+      getTourList();
+   }, [getTourList]);
 
    const columns = [
       {
@@ -37,16 +39,11 @@ const UserListPage = () => {
          sortable: true,
       },
       {
-         name: 'Email',
-         selector: (row) => row.email,
+         name: 'Summary',
+         selector: (row) => row.summary,
       },
       {
-         name: 'Role',
-         selector: (row) => row.role,
-         sortable: true,
-      },
-      {
-         name: 'Image',
+         name: 'Cover Image',
          selector: (row) =>
             row.image ? (
                <ImagePriview
@@ -57,27 +54,49 @@ const UserListPage = () => {
             ),
       },
       {
-         name: 'Member Since',
-         selector: (row) => row.createdAt,
+         name: 'Start Dates',
+         selector: (row) => row.startDates,
          sortable: true,
       },
       {
-         name: 'Active/Inactive',
-         selector: (row) =>
-            row.active ? (
-               <Badge bg="success">active</Badge>
-            ) : (
-               <Badge bg="danger">inactive</Badge>
-            ),
+         name: 'Start Location',
+         selector: (row) => row.startLocation,
          sortable: true,
+      },
+      {
+         name: 'duration',
+         selector: (row) => row.duration + ' days',
+         sortable: true,
+      },
+      {
+         name: 'Group Limit',
+         selector: (row) => row.maxGroupSize + ' people',
+         sortable: true,
+      },
+      {
+         name: 'Difficulty',
+         selector: (row) => row.difficulty,
+         sortable: true,
+      },
+      {
+         name: 'Price',
+         selector: (row) => row.price + ' $',
+         sortable: true,
+      },
+
+      {
+         name: 'View Details',
+         selector: (row) => (
+            <NavLink to={`/admin/tours/${row.slug}`}>Know More</NavLink>
+         ),
       },
       {
          name: 'Action',
          selector: (row) => (
             <AdminActionButton
                id={row._id}
-               contentType="users"
-               submitDelete={deleteUser}
+               contentType="tours"
+               submitDelete={deleteTours}
             />
          ),
       },
@@ -86,8 +105,8 @@ const UserListPage = () => {
       <>
          <div className="container-fluid px-4">
             <AdminBreadCrumb
-               title={'Users List'}
-               label={'users'}
+               title={'Tours List'}
+               label={'tours'}
                showAdd={true}
             />
 
@@ -101,4 +120,4 @@ const UserListPage = () => {
    );
 };
 
-export default UserListPage;
+export default TourListPage;

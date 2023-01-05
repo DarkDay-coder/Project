@@ -1,11 +1,8 @@
-const catchAsync = require('../middleware/catchAsync');
 const userModel = require('./../model/user.model');
 const jwt = require('jsonwebtoken');
-const apiError = require('../middleware/apiError.middleware');
-const Error = new apiError();
 
 class authMiddleware {
-   authorization = catchAsync(async (req, res, next) => {
+   authorization = async (req, res, next) => {
       // 1) Getting token and check if it exist or not
       let token = '';
       if (
@@ -16,7 +13,7 @@ class authMiddleware {
       }
       if (!token) {
          res.status(401).json({
-            status: 'fail',
+            status: false,
             msg: 'you are not logged in..!!',
          });
       }
@@ -28,27 +25,26 @@ class authMiddleware {
       const isUser = await userModel.findById(verification.id);
       if (!isUser) {
          return res.status(404).json({
-            status: 'fail',
+            status: false,
             msg: 'The user doesnot exist anymore',
          });
       }
-
       req.user = isUser;
       next();
-   });
-
-   routeRestriction = (...roles) => {
-      return (req, res, next) => {
-         // roles ['admin', 'lead-guide']. role='user'
-         const bool = roles.includes(req.user.role);
-         if (!bool) {
-            return next(
-               Error('You do not have permission to perform this action', 403)
-            );
-         }
-         next();
-      };
    };
+
+   //    routeRestriction = (...roles) => {
+   //       return (req, res, next) => {
+   //          // roles ['admin', 'lead-guide']. role='user'
+   //          const bool = roles.includes(req.user.role);
+   //          if (!bool) {
+   //             return next(
+   //                Error('You do not have permission to perform this action', 403)
+   //             );
+   //          }
+   //          next();
+   //       };
+   //    };
 }
 
 module.exports = authMiddleware;

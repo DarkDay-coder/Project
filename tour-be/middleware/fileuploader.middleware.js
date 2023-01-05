@@ -5,6 +5,7 @@ const ALLOWED_EXTS = ['jpg', 'jpeg', 'png', 'svg', 'gif', 'bmp', 'webp'];
 const diskStorage = multer.diskStorage({
    destination: (req, file, cb) => {
       let path = process.env.UPLOAD_PATH;
+      console.log('path: ', path);
       cb(null, path);
    },
    filename: (req, file, cb) => {
@@ -26,7 +27,7 @@ const fileUploader = multer({
    storage: diskStorage,
    fileFilter: imageFilter,
    limits: {
-      fileSize: 100000,
+      fileSize: 10000000,
       files: 20,
    },
 });

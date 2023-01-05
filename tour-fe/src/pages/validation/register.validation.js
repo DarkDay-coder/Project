@@ -17,5 +17,5 @@ export const registerValidationSchema = Yup.object({
          [Yup.ref('password')],
          'your password must match with re-password'
       ),
-   photo: Yup.object().default(null),
+   image: Yup.object().default(null),
 });

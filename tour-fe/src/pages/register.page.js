@@ -1,9 +1,10 @@
 import { useFormik } from 'formik';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useState } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Loader from '../component/loader.component';
+import AuthService from '../services/auth.service';
 // import AuthService from '../services/auth.service';
 import PageHeader from './layout/headerLayout.page';
 import { registerValidationSchema } from './validation/register.validation';
@@ -29,32 +30,38 @@ let socialList = [
       className: 'instagram',
    },
 ];
-let initialValues = { name: '', email: '', password: '', confirmPassword: '' };
+let initialValues = {
+   name: '',
+   email: '',
+   password: '',
+   confirmPassword: '',
+   image: '',
+};
 
 const RegisterPage = () => {
    document.title = 'Tour | Register';
 
-   // const auth_svc = new AuthService();
+   const auth_svc = new AuthService();
 
-   let [loading, setLoading] = useState(true);
+   let [loading, setLoading] = useState(false);
    const navigate = useNavigate();
-   let [token] = useState(localStorage.getItem('token_tour'));
-   useEffect(() => {
-      if (token) {
-         let user = JSON.parse(localStorage.getItem('user'));
-         if (user.role === 'admin' || user.role === 'lead-guide') {
-            setLoading(false);
-            toast.success('You are already logged in as admin');
-            navigate('/admin');
-         } else {
-            setLoading(false);
-            toast.success('You are already logged in!');
-            navigate('/');
-         }
-      } else {
-         setLoading(false);
-      }
-   }, [token, navigate]);
+   // let [token] = useState(localStorage.getItem('token_tour'));
+   // useEffect(() => {
+   //    if (token) {
+   //       let user = JSON.parse(localStorage.getItem('user'));
+   //       if (user.role === 'admin' || user.role === 'lead-guide') {
+   //          setLoading(false);
+   //          toast.success('You are already logged in as admin');
+   //          navigate('/admin');
+   //       } else {
+   //          setLoading(false);
+   //          toast.success('You are already logged in!');
+   //          navigate('/');
+   //       }
+   //    } else {
+   //       setLoading(false);
+   //    }
+   // }, [token, navigate]);
 
    const {
       values,
@@ -67,9 +74,21 @@ const RegisterPage = () => {
    } = useFormik({
       initialValues,
       validationSchema: registerValidationSchema,
-      onSubmit: (values, action) => {
-         action.resetForm();
+      onSubmit: async (values, action) => {
          console.log(values);
+         try {
+            let data = await auth_svc.signup(values);
+            action.resetForm();
+            if (data) {
+               toast.success(`Hello mr. ${data.name}`, { theme: 'dark' });
+               setLoading(false);
+               navigate('/');
+            } else {
+               toast.warning('sorry, something went wrong !!');
+            }
+         } catch (error) {
+            console.log(error);
+         }
       },
    });
 
@@ -175,7 +194,7 @@ const RegisterPage = () => {
                               : ''}
                         </span>
                      </Form.Group>
-                     <Form.Group className="my-2">
+                     {/* <Form.Group className="my-2">
                         <Form.Control
                            className="form-control"
                            type="file"
@@ -193,7 +212,7 @@ const RegisterPage = () => {
                         <span className="text-danger">
                            {errors.image && touched.image ? errors.image : ''}
                         </span>
-                     </Form.Group>
+                     </Form.Group> */}
                      <Form.Group className="form-group">
                         <Button className="lab-btn" type="submit">
                            <i className="icofont-check"> </i> Proceed!{' '}

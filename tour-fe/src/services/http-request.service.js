@@ -67,5 +67,19 @@ class HttpService {
          throw error;
       }
    };
+
+   updateRequest = async (url, data, is_strict, multipart = false) => {
+      try {
+         this.getHeaders(is_strict, multipart);
+         let response = await axiosInstance.patch(url, data, this.headers);
+         if (response) {
+            return response;
+         } else {
+            throw response;
+         }
+      } catch (error) {
+         throw error;
+      }
+   };
 }
 export default HttpService;

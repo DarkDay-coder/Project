@@ -1,19 +1,19 @@
 import React from 'react';
 import AdminBreadCrumb from '../../../component/admin/admin.bredcrumb.component';
-import UserForm from './user-form.component';
-import UserService from '../../../services/user.service';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import UserForm from '../users/user-form.component';
+import TourService from '../../../services/tour.service';
 
-const UserCreatePage = () => {
-   document.title = 'TG | create new user';
+const TourCreatePage = () => {
+   document.title = 'TG | create new tour';
    const navigate = useNavigate();
    const submitForm = async (data) => {
       try {
-         let userService = new UserService();
-         let response = await userService.create(data);
+         let tourService = new TourService();
+         let response = await tourService.create(data);
          toast.success(response.msg);
-         navigate('/admin/users');
+         navigate('/admin/tours');
       } catch (error) {
          toast.error(error);
       }
@@ -23,8 +23,8 @@ const UserCreatePage = () => {
       <>
          <div className="container-fluid px-4">
             <AdminBreadCrumb
-               title={'User Create'}
-               label="Users"
+               title={'Tour Create'}
+               label="Tours"
                showList={true}
                showAdd={false}
             />
@@ -50,4 +50,4 @@ const UserCreatePage = () => {
    );
 };
 
-export default UserCreatePage;
+export default TourCreatePage;

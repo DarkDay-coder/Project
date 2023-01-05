@@ -30,6 +30,12 @@ const AdminSidebar = () => {
                         Tours Management
                      </NavLink>
 
+                     <NavLink className="nav-link" to="/admin/locations">
+                        <div className="sb-nav-link-icon">
+                           <i className="icofont-compass-alt"></i>
+                        </div>
+                        Location Management
+                     </NavLink>
                      <NavLink className="nav-link" to="/admin/guides">
                         <div className="sb-nav-link-icon">
                            <i className="icofont-compass-alt"></i>
