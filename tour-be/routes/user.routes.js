@@ -25,7 +25,11 @@ router
    .route('/:id')
    .get(user_ctrl.getUserById)
    .delete(user_ctrl.deleteUserById)
-   .patch(user_ctrl.updateUserById);
+   .patch(
+      auth_midddleware.authorization,
+      fileUploader.single('image'),
+      user_ctrl.updateUserById
+   );
 
 module.exports = router;
 

@@ -2,10 +2,12 @@ import { useFormik } from 'formik';
 import React, { useEffect } from 'react';
 import { Button, Col, Form, Image, Row } from 'react-bootstrap';
 import { NavLink, useParams } from 'react-router-dom';
-import { userValidation } from '../../validation/user.validation';
-import { editUserValidation } from '../../validation/user.validation copy';
+import {
+   editUserValidation,
+   userValidation,
+} from '../../validation/user.Validatin';
 
-const UserForm = ({ data, submitForm }) => {
+const UserForm = ({ data, submitForm, label }) => {
    const params = useParams();
    const formik = useFormik({
       initialValues: data,
@@ -214,13 +216,14 @@ const UserForm = ({ data, submitForm }) => {
                </Col>
             </Row>
          </Form.Group>
+
          {/* Buttons */}
          <Form.Group className="text-center">
             <Button
                className="btn-success lab-btn mx-2"
                onClick={formik.handleSubmit}
             >
-               <i className="icofont-paper-plane mx-1"> </i> Create User{' '}
+               <i className="icofont-paper-plane mx-1"> </i> {label}
                <i className="icofont-paper-plane mx-1"></i>
             </Button>
             <NavLink className="btn-warning  lab-btn mx-2" to="/admin/users">

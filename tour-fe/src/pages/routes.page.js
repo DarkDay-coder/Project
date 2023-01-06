@@ -16,7 +16,8 @@ import UserEditPage from './admin/users/userEdit.page';
 import TourListPage from './admin/tours/tourList.page';
 import TourCreatePage from './admin/tours/tourCreatePage';
 import LocationListPage from './admin/location/location-list.page';
-import LocationCreatePage from './admin/location/location-create.page';
+import TourEditPage from './admin/tours/tourEdit.page';
+import LocationCreatePage from './admin/location/locationCreate.page';
 
 const RoutePage = () => {
    return (
@@ -37,8 +38,11 @@ const RoutePage = () => {
                   <Route path="users" element={<UsersListPage />} />
                   <Route path="users/create" element={<UserCreatePage />} />
                   <Route path="users/:id/edit" element={<UserEditPage />} />
+
                   <Route path="tours" element={<TourListPage />} />
                   <Route path="tours/create" element={<TourCreatePage />} />
+                  <Route path="tours/:id/edit" element={<TourEditPage />} />
+
                   <Route
                      path="locations/create"
                      element={<LocationCreatePage />}

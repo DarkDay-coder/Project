@@ -114,23 +114,25 @@ class UserController {
    };
 
    updateUserById = async (req, res, next) => {
-      console.log('the update request is for id: ' + req.params.id);
+      const user = await UserModel.findById(req.params.id);
+      if (!user) {
+         res.status(404).json({
+            status: false,
+            msg: 'user does not exist',
+         });
+      }
+
       let data = {
          ...req.body,
-         image: req.file?.filename ? req.file.filename : null,
+         image: req.file?.filename ? req.file.filename : user.image,
       };
-      const docs = await Model.findByIdAndUpdate(req.params.id, data, {
+      const docs = await UserModel.findByIdAndUpdate(req.params.id, data, {
          new: true,
          runValidators: true,
       });
-      if (!docs) {
-         res.status(404).json({
-            status: 'fail',
-            msg: 'user does not exist',
-         });
-      } else {
+      if (docs) {
          res.status(200).json({
-            status: 'success',
+            status: true,
             data: docs,
          });
       }

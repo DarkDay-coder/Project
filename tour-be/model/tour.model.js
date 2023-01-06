@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const slugify = require('slugify');
 const UserModel = require('./user.model');
 const tourSchema = new mongoose.Schema({
-   name: {
+   tour_name: {
       type: String,
       unique: true,
       trim: true,
@@ -14,6 +14,10 @@ const tourSchema = new mongoose.Schema({
       trim: true,
       required: true,
    },
+   status: {
+      type: Boolean,
+      default: true,
+   },
    summary: {
       type: String,
       required: true,
@@ -21,24 +25,26 @@ const tourSchema = new mongoose.Schema({
    },
    startDates: [Date],
    duration: {
-      type: Number,
+      type: String,
       required: true,
    },
    maxGroupSize: {
       type: Number,
       required: true,
    },
-   difficulty: {
-      type: String,
-      enum: ['easy', 'medium', 'difficult'],
+   difficulty_id: {
+      type: mongoose.Types.ObjectId,
+      ref: 'Difficulty',
    },
-   ratingsAverage: {
-      type: Number,
-   },
-   ratingsQuantity: {
-      type: Number,
-      default: 0,
-   },
+
+   // Depends on reviews:
+   // ratingsAverage: {
+   //    type: Number,
+   // },
+   // ratingsQuantity: {
+   //    type: Number,
+   //    default: 0,
+   // },
    // reviews: [
    //    {
    //       types: mongoose.Types.ObjectId,
@@ -52,7 +58,7 @@ const tourSchema = new mongoose.Schema({
    discount: {
       type: Number,
    },
-   actual_price: {
+   actualPrice: {
       type: Number,
       min: 1,
    },
@@ -61,19 +67,23 @@ const tourSchema = new mongoose.Schema({
       // required: true,
    },
    images: [String],
-   startLocation: {
+   startLocation_id: {
       type: mongoose.Types.ObjectId,
       ref: 'Locations',
       default: null,
    },
-   locations: [
+   locations_id: [
       {
          type: mongoose.Types.ObjectId,
          ref: 'Locations',
          default: null,
       },
    ],
-   guides: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
+   guides_id: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
+   createdBy_id: {
+      type: mongoose.Types.ObjectId,
+      ref: 'User',
+   },
 });
 
 // virtual populate

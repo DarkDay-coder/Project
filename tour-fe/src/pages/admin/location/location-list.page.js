@@ -7,6 +7,7 @@ import { ImagePriview } from '../../../component/imagepreview.component';
 import AdminActionButton from '../../../component/admin/admin.actionButton';
 import noImage from './../../../assets/noImg.png';
 import AdminBreadCrumb from '../../../component/admin/admin.bredcrumb.component';
+import { Badge } from 'react-bootstrap';
 
 const LocationListPage = () => {
    let [data, setData] = useState();
@@ -38,12 +39,13 @@ const LocationListPage = () => {
    const columns = [
       {
          name: 'Name',
-         selector: (row) => row.name,
+         selector: (row) => row.location_name,
          sortable: true,
       },
       {
          name: 'Country',
          selector: (row) => row.country,
+         sortable: true,
       },
       {
          name: 'Image',
@@ -57,11 +59,21 @@ const LocationListPage = () => {
             ),
       },
       {
+         name: 'Status',
+         selector: (row) =>
+            row.status ? (
+               <Badge bg="success">active</Badge>
+            ) : (
+               <Badge bg="danger">inactive</Badge>
+            ),
+         sortable: true,
+      },
+      {
          name: 'Action',
          selector: (row) => (
             <AdminActionButton
                id={row._id}
-               contentType="location"
+               contentType="locations"
                // submitDelete={deleteLocation}
             />
          ),

@@ -10,6 +10,7 @@ class LocationController {
       });
    };
    createLocation = async (req, res, next) => {
+      console.log(req.body);
       let data = { ...req.body, imageCover: req.file ? req.file.filename : '' };
       const newLocation = await LocationModel.create(data);
       if (newLocation) {

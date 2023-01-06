@@ -16,11 +16,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 // DATA PARSER MIDDLEWARE
 app.use(express.json());
-app.use(
-   express.urlencoded({
-      extended: false,
-   })
-);
+app.use(express.urlencoded({}));
 
 // PUBLISHING STATIC FILES
 app.use('/images', express.static('public/uploads/'));

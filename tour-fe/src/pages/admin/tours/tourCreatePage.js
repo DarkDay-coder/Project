@@ -2,8 +2,8 @@ import React from 'react';
 import AdminBreadCrumb from '../../../component/admin/admin.bredcrumb.component';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import UserForm from '../users/user-form.component';
 import TourService from '../../../services/tour.service';
+import TourForm from './tour-form.component';
 
 const TourCreatePage = () => {
    document.title = 'TG | create new tour';
@@ -12,7 +12,7 @@ const TourCreatePage = () => {
       try {
          let tourService = new TourService();
          let response = await tourService.create(data);
-         toast.success(response.msg);
+         toast.success('new tour created !!');
          navigate('/admin/tours');
       } catch (error) {
          toast.error(error);
@@ -31,15 +31,23 @@ const TourCreatePage = () => {
 
             <div className="card mb-4">
                <div className="card-body">
-                  <UserForm
+                  <TourForm
                      data={{
-                        name: '',
-                        email: '',
-                        password: '',
-                        confirmPassword: '',
-                        role: '',
-                        image: '',
-                        status: '',
+                        tour_name: '',
+                        description: '',
+                        summary: '',
+                        startDates: '',
+                        duration: '',
+                        maxGroupSize: '',
+                        difficulty_id: '',
+                        price: '',
+                        discount: '',
+                        imageCover: '',
+                        images: '',
+                        startLocation_id: '',
+                        locations_id: '',
+                        guides_id: '',
+                        createdBy_id: '',
                      }}
                      submitForm={submitForm}
                   />

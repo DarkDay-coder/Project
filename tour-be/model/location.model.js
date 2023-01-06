@@ -1,12 +1,10 @@
 const mongoose = require('mongoose');
-const UserModel = require('./user.model');
 
 const LocationSchema = new mongoose.Schema(
    {
-      name: {
+      location_name: {
          type: String,
          required: true,
-         unique: true,
       },
       country: {
          type: String,
@@ -19,9 +17,9 @@ const LocationSchema = new mongoose.Schema(
       imageCover: {
          type: String,
       },
-      createdBy: {
+      createdBy_id: {
          type: mongoose.Types.ObjectId,
-         ref: 'Users',
+         ref: 'User',
       },
    },
    {

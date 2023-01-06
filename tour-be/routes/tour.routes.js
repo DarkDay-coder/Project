@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const fileUploader = require('../middleware/fileuploader.middleware');
 const TourController = require('./../controller/tour.controller');
 const tour_controller = new TourController();
 const authMiddleware = require('./../middleware/auth.middleware');
@@ -9,6 +10,8 @@ router.get('/', tour_controller.getAllTours).post(
    '/create',
    auth_middleware.authorization,
    // auth_middleware.restrictTo('lead-guide', 'admin'),
+   fileUploader.single('imageCover'),
+   fileUploader.array('images'),
    tour_controller.createTour
 );
 

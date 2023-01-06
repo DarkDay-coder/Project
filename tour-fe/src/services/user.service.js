@@ -3,6 +3,11 @@ import { toast } from 'react-toastify';
 import HttpService from './http-request.service';
 class UserService extends HttpService {
    create = async (data) => {
+      console.log(
+         '🚀 ~ file: user.service.js:6 ~ UserService ~ create= ~ data',
+         data
+      );
+
       try {
          // FormData
          let formData = new FormData();
@@ -49,7 +54,7 @@ class UserService extends HttpService {
 
    getUserById = async (id) => {
       try {
-         let user = await this.getRequest('/users/' + id);
+         let user = await this.getRequest(`/users/${id}`);
          return user;
       } catch (error) {
          throw error;
@@ -57,6 +62,11 @@ class UserService extends HttpService {
    };
 
    updateUserById = async (data, id) => {
+      console.log(
+         '🚀 ~ file: user.service.js:60 ~ UserService ~ updateUserById= ~ data, id',
+         data,
+         id
+      );
       try {
          let formData = new FormData();
          if (data.image && typeof data.image === 'object') {
@@ -66,8 +76,13 @@ class UserService extends HttpService {
          Object.keys(data).map((key) => {
             formData.append(key, data[key]);
          });
+         console.log(
+            '🚀 ~ file: user.service.js:73 ~ UserService ~ Object.keys ~ formData',
+            formData
+         );
+
          let response = await this.updateRequest(
-            '/users/' + id,
+            `/users/${id}`,
             formData,
             true,
             true
