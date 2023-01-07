@@ -8,7 +8,7 @@ import noImage from './../../../assets/noImg.png';
 import { ImagePriview } from '../../../component/imagepreview.component';
 import AdminActionButton from '../../../component/admin/admin.actionButton';
 
-const UserListPage = () => {
+const GuideList = () => {
    document.title = 'TG | User List';
    let user_svc = new UserService();
    let [data, setData] = useState([]);
@@ -31,7 +31,7 @@ const UserListPage = () => {
    }, [getUserList]);
    // }, [getUserList, deleteUser]);
 
-   const userlist = data.filter((user) => user.role === 'user');
+   const userlist = data.filter((user) => user.role === 'guide');
    const columns = [
       {
          name: 'Name',
@@ -103,4 +103,4 @@ const UserListPage = () => {
    );
 };
 
-export default UserListPage;
+export default GuideList;

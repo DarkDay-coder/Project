@@ -4,40 +4,54 @@ import LocationService from '../../../services/location.service';
 import LocationForm from './location-form.page';
 import { toast } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
+import Loader from '../../../component/loader.component';
+import AuthService from '../../../services/auth.service';
 
-const UserEditPage = () => {
-   document.title = 'TG | edit user';
+const LocationEditPage = () => {
+   document.title = 'TG | edit location';
    const navigate = useNavigate();
    let loc_svc = new LocationService();
-   let params = useParams();
+   let { id } = useParams();
    let [location, setLocation] = useState();
    const getLocation = useCallback(async () => {
       try {
-         let locationData = await loc_svc.getLocationById(params.id);
-         if (locationData.status) {
-            setLocation(locationData.data);
-            console.log(locationData.data);
+         let response = await loc_svc.getLocationById(id);
+         if (response.status) {
+            setLocation(response.data);
          } else {
-            toast.info("data doesn't exist");
-            navigate('/admin/locations');
+            toast.error(response.msg);
          }
       } catch (error) {
-         console.error(error);
+         navigate('/admin/locations');
       }
    }, []);
+   let [user, setUser] = useState();
+   const getMe = async () => {
+      const auth_svc = new AuthService();
+      let user = await auth_svc.getRequest('/users/me', true);
+      setUser(user.data);
+   };
+
    useEffect(() => {
       getLocation();
+      getMe();
    }, [getLocation]);
 
+   console.log(user);
    const submitForm = async (data) => {
       try {
-         let response = await loc_svc.updateLocationById(data, params.id);
-         toast.success('data updated successfully!!');
-         navigate('/admin/locations');
+         let response = await loc_svc.updateLocationById(data, id);
+         if (response.status) {
+            toast.success('data updated successfully!!');
+            navigate('/admin/locations');
+         } else {
+            throw response;
+         }
       } catch (error) {
          toast.error(error);
       }
    };
+
    return (
       <>
          <div className="container-fluid px-4">
@@ -49,7 +63,16 @@ const UserEditPage = () => {
             />
             <div className="card mb-4">
                <div className="card-body">
-                  <LocationForm data={location} submitForm={submitForm} />
+                  {location && user ? (
+                     <LocationForm
+                        data={location}
+                        submitForm={submitForm}
+                        label="Edit"
+                        user={user}
+                     />
+                  ) : (
+                     <Loader />
+                  )}
                </div>
             </div>
          </div>
@@ -57,4 +80,4 @@ const UserEditPage = () => {
    );
 };
 
-export default UserEditPage;
+export default LocationEditPage;

@@ -1,6 +1,6 @@
 import { Col, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import './headerLayout.page.css';
+import '../../assets/style/headerLayout.page.css';
 const PageHeader = ({ title, curPage }) => {
    return (
       <div className="pageheader-section">

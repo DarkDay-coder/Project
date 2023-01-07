@@ -1,19 +1,21 @@
 import { useFormik } from 'formik';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { NavLink, useParams } from 'react-router-dom';
 import { locationValidation } from '../../validation/location.validation';
 
-const LocationForm = ({ data, submitForm }) => {
+const LocationForm = ({ data, submitForm, label, user }) => {
    // const params = useParams();
    const formik = useFormik({
       initialValues: data,
       validationSchema: locationValidation,
       onSubmit: (values, action) => {
          submitForm(values);
+         // console.log(values);
          // action.resetForm();
       },
    });
+
    useEffect(() => {
       if (data) {
          formik.setValues({
@@ -37,7 +39,8 @@ const LocationForm = ({ data, submitForm }) => {
                      onBlur={formik.handleBlur}
                   />
                   <span className="text-danger">
-                     {formik.errors?.location_name && formik.touched.location_name
+                     {formik.errors?.location_name &&
+                     formik.touched.location_name
                         ? formik.errors.location_name
                         : ''}
                   </span>
@@ -62,9 +65,77 @@ const LocationForm = ({ data, submitForm }) => {
                   </span>
                </Form.Group>
             </Col>
+            {/* City */}
+            <Col sm={6}>
+               <Form.Group className="my-2">
+                  <Form.Control
+                     className="form-control"
+                     type="text"
+                     name="city"
+                     placeholder="Enter city of the location *"
+                     value={formik.values?.city}
+                     onChange={formik.handleChange}
+                     onBlur={formik.handleBlur}
+                  />
+                  <span className="text-danger">
+                     {formik.errors.city && formik.touched.city
+                        ? formik.errors.city
+                        : ''}
+                  </span>
+               </Form.Group>
+            </Col>
          </Row>
 
-         {/* Image Cover*/}
+         <Row>
+            {/* Status */}
+            <Col sm={6}>
+               <Form.Group>
+                  <Row>
+                     <Col sm={4}>Is Active ?</Col>
+                     <Col sm={8}>
+                        <Form.Check
+                           type="switch"
+                           label="Yes"
+                           name="status"
+                           checked={formik.values.status ? true : false}
+                           value={formik.values?.status}
+                           onChange={(e) => {
+                              formik.setValues({
+                                 ...formik.values,
+                                 status: e.target.checked,
+                              });
+                           }}
+                        />
+                     </Col>
+                  </Row>
+
+                  <span className="text-danger">
+                     {formik.errors.active && formik.touched.active
+                        ? formik.errors.active
+                        : ''}
+                  </span>
+               </Form.Group>
+            </Col>
+            {/* Created By */}
+            <Col sm={6}>
+               <Form.Group className="my-2">
+                  <Form.Control
+                     className="form-control"
+                     type="text"
+                     name="createdBy"
+                     value={user.name}
+                     // value={formik.setValues({
+                     //    ...formik.values,
+                     //    createdBy: user.name,
+                     // })}
+                     onChange={formik.handleChange}
+                     onBlur={formik.handleBlur}
+                  />
+               </Form.Group>
+            </Col>
+         </Row>
+
+         {/* Image */}
          <Form.Group className="my-2">
             <Row className="mb-0">
                <Col sm={7}>
@@ -73,6 +144,7 @@ const LocationForm = ({ data, submitForm }) => {
                      type="file"
                      name="imageCover"
                      accept="image/*"
+                     // value={formik.values?.image}
                      onChange={(e) => {
                         formik.setValues({
                            ...formik.values,
@@ -104,59 +176,19 @@ const LocationForm = ({ data, submitForm }) => {
             </Row>
          </Form.Group>
 
-         <Row>
-            {/* Status */}
-            <Col sm={6}>
-               <Form.Group>
-                  <Row>
-                     <Col sm={4}>Is Active ?</Col>
-                     <Col sm={8}>
-                        <Form.Check
-                           type="switch"
-                           id="custom-switch"
-                           label="Yes"
-                           name="status"
-                           value={formik.values?.status}
-                           onChange={(e) => {
-                              formik.setValues({
-                                 ...formik.values,
-                                 status: e.target.checked,
-                              });
-                           }}
-                        />
-                     </Col>
-                  </Row>
-
-                  <span className="text-danger">
-                     {formik.errors.active && formik.touched.active
-                        ? formik.errors.active
-                        : ''}
-                  </span>
-               </Form.Group>
-            </Col>
-            {/* Created By */}
-            <Col sm={6}>
-               <Form.Group className="my-2">
-                  <Form.Control
-                     className="form-control"
-                     type="text"
-                     name="createdBy_id"
-                     disabled
-                  />
-               </Form.Group>
-            </Col>
-         </Row>
-
          {/* Buttons */}
          <Form.Group className="text-center">
             <Button
                className="btn-success lab-btn mx-2"
                onClick={formik.handleSubmit}
             >
-               <i className="icofont-paper-plane mx-1"> </i> Create Location{' '}
+               <i className="icofont-paper-plane mx-1"> </i> {label}
                <i className="icofont-paper-plane mx-1"></i>
             </Button>
-            <NavLink className="btn-warning  lab-btn mx-2" to="/admin/users">
+            <NavLink
+               className="btn-warning  lab-btn mx-2"
+               to="/admin/locations"
+            >
                <i className="icofont-exit mx-1"> </i> Cancel{' '}
                <i className="icofont-exit mx-1"></i>
             </NavLink>

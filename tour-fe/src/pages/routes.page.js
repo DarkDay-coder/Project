@@ -18,6 +18,11 @@ import TourCreatePage from './admin/tours/tourCreatePage';
 import LocationListPage from './admin/location/location-list.page';
 import TourEditPage from './admin/tours/tourEdit.page';
 import LocationCreatePage from './admin/location/locationCreate.page';
+import LocationEditPage from './admin/location/locationEdit.page';
+import AdminList from './admin/users/adminList.page';
+import LeadGuideList from './admin/users/leadguideList.page';
+import UserListPage from './admin/users/userList.page';
+import GuideList from './admin/users/guideList.page';
 
 const RoutePage = () => {
    return (
@@ -35,7 +40,11 @@ const RoutePage = () => {
                   element={<AdminPrivateLayout Compontent={<AdminLayout />} />}
                >
                   <Route index element={<AdminDashBoard />} />
-                  <Route path="users" element={<UsersListPage />} />
+                  <Route path="role/admin" element={<AdminList />} />
+                  <Route path="role/lead-guide" element={<LeadGuideList />} />
+                  <Route path="role/users" element={<UserListPage />} />
+                  <Route path="role/guide" element={<GuideList />} />
+
                   <Route path="users/create" element={<UserCreatePage />} />
                   <Route path="users/:id/edit" element={<UserEditPage />} />
 
@@ -43,11 +52,15 @@ const RoutePage = () => {
                   <Route path="tours/create" element={<TourCreatePage />} />
                   <Route path="tours/:id/edit" element={<TourEditPage />} />
 
+                  <Route path="locations" element={<LocationListPage />} />
                   <Route
                      path="locations/create"
                      element={<LocationCreatePage />}
                   />
-                  <Route path="locations" element={<LocationListPage />} />
+                  <Route
+                     path="locations/:id/edit"
+                     element={<LocationEditPage />}
+                  />
 
                   {/* <Route path="tours">
                      <Route index element={<ToursListPage />} />

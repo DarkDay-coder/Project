@@ -5,4 +5,5 @@ export const locationValidation = Yup.object({
       .required('location Name is required!')
       .nullable(),
    country: Yup.string().required('locatin must have country name!').nullable(),
+   imageCover: Yup.object().nullable(),
 });

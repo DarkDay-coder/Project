@@ -2,47 +2,25 @@ const router = require('express').Router();
 const authMiddleware = require('../middleware/auth.middleware');
 const auth_middleware = new authMiddleware();
 const LocationController = require('./../controller/location.controller');
-const location_ctrl = new LocationController();
+const loc_ctrl = new LocationController();
+const fileUploader = require('./../middleware/fileuploader.middleware');
 
 // CRUD operation
-router.get('/', location_ctrl.getAllLocation).post(
-   '/create',
-   auth_middleware.authorization,
-   // auth_middleware.restrictTo('lead-guide', 'admin'),
-   location_ctrl.createLocation
-);
+router
+   .get('/', loc_ctrl.getAllLocation)
+   .post(
+      '/create',
+      auth_middleware.authorization,
+      fileUploader.single('imageCover'),
+      // auth_middleware.restrictTo('lead-guide', 'admin'),
+      loc_ctrl.createLocation
+   )
+   .get('/:id', loc_ctrl.getLocationById)
+   .patch(
+      '/:id',
+      fileUploader.single('imageCover'),
+      loc_ctrl.updateLocationById
+   )
+   .delete('/:id', loc_ctrl.deleteLocationById);
 
 module.exports = router;
-
-//
-// router
-//    .route('/top-5-cheap')
-//    .get(tour_controller.aliasTopTours, tour_controller.getAllTours);
-// router.route('/tour-stats').get(tour_controller.getTourStats);
-// router
-//    .route('/monthly-plan/:year')
-//    .get(
-//       auth_middleware.authorize,
-//       auth_middleware.restrictTo('admin', 'lead-guide', 'guide'),
-//       tour_controller.getMonthlyPlan
-//    );
-// router
-//    .post(
-//       auth_middleware.authorize,
-//       auth_middleware.restrictTo('lead-guide', 'admin'),
-//       tour_controller.createTour
-//    );
-// router
-//    .route('/:id')
-//    .get(tour_controller.getTourById)
-//    .patch(
-//       auth_middleware.authorize,
-//       auth_middleware.restrictTo('admin', 'lead-guide'),
-//       tour_controller.updateTourById
-//    )
-//    .delete(
-//       auth_middleware.authorize,
-//       auth_middleware.restrictTo('admin', 'lead-guide'),
-//       tour_controller.deleteTourById
-//    );
-// module.exports = router;

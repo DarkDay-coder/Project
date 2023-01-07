@@ -13,22 +13,10 @@ const LocationListPage = () => {
    let [data, setData] = useState();
    let locationService = new LocationService();
 
-   //    const deleteBrand = async (id) => {
-   //       try {
-   //          let del = await brand_svc.deleteBrandById(id);
-   //          if (del.status) {
-   //             toast.success(del.msg);
-   //             getBrandLists();
-   //          }
-   //       } catch (except) {
-   //          toast.warning(except);
-   //       }
-   //    };
-
    const getLocationList = useCallback(async () => {
       try {
          let response = await locationService.listAllLocation();
-         setData(response.data);
+         if (response.status) setData(response.data);
       } catch (execpt) {
          toast.error(execpt);
       }
@@ -36,6 +24,14 @@ const LocationListPage = () => {
    useEffect(() => {
       getLocationList();
    }, [getLocationList]);
+
+   const deleteLocation = async (id) => {
+      try {
+         await locationService.deleteLocationById(id);
+      } catch {}
+   };
+
+   // Datatable
    const columns = [
       {
          name: 'Name',
@@ -48,7 +44,11 @@ const LocationListPage = () => {
          sortable: true,
       },
       {
-         name: 'Image',
+         name: 'City',
+         selector: (row) => row.city,
+      },
+      {
+         name: 'Cover Image',
          selector: (row) =>
             row.imageCover ? (
                <ImagePriview
@@ -57,6 +57,15 @@ const LocationListPage = () => {
             ) : (
                <ImagePriview url={noImage} />
             ),
+      },
+      {
+         name: 'Created By',
+         selector: (row) => row.createBy,
+         sortable: true,
+      },
+      {
+         name: 'Created At',
+         selector: (row) => row.createdAt,
       },
       {
          name: 'Status',
@@ -74,7 +83,7 @@ const LocationListPage = () => {
             <AdminActionButton
                id={row._id}
                contentType="locations"
-               // submitDelete={deleteLocation}
+               submitDelete={deleteLocation}
             />
          ),
       },

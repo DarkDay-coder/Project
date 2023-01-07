@@ -1,17 +1,35 @@
-import { Container, Image } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Container } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
 import NavBar from '../component/user/user.Navbar.component';
+import '../assets/style/error.page.css';
 
-const title = 'Error 404!';
-const desc =
-   'Oops! The Page You Are Looking For Could Not Be Found On Our Server...!!';
-const btnText = 'Go Back To Home';
+// const title = 'Error 404!';
+// const desc =
+//    'Oops! The Page You Are Looking For Could Not Be Found On Our Server...!!';
+// const btnText = 'Go Back To Home';
 
 const ErrorPage = () => {
    return (
-      <Container>
+      <Container className="body">
          <NavBar />
-         <div className="four-zero-section padding-tb section-bg">
+         <div className="link-container">
+            <NavLink to="/" className="more-link">
+               Return to Homepage
+            </NavLink>
+         </div>
+         <h1>404 Error Page</h1>
+         <p className="zoom-area">
+            Looks like the page doesn't exist on our server
+         </p>
+         <Container className="error-container">
+            <span>4</span>
+            <span>
+               <span className="screen-reader-text">0</span>
+            </span>
+            <span>4</span>
+         </Container>
+
+         {/* <div className="four-zero-section padding-tb section-bg">
             <div className="container">
                <div className="row align-items-center">
                   <div className="col-lg-4 col-sm-6 col-12">
@@ -30,11 +48,10 @@ const ErrorPage = () => {
                   </div>
                   <div className="col-lg-8 col-sm-6 col-12">
                      <p> lorem ipsum ............ !!!</p>
-                     {/* FIXME: TODO:  some interesting content for the user */}
                   </div>
                </div>
             </div>
-         </div>
+         </div> */}
       </Container>
    );
 };
